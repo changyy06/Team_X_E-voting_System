@@ -1,15 +1,19 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faInstagram, faFacebook, faXTwitter } from '@fortawesome/free-brands-svg-icons';
 
+// CreateWalletModal component should be here
+
 export default function VotingSystem() {
   const [selectedCandidate, setSelectedCandidate] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [balance, setBalance] = useState(null);
+  const [tokenBalance, setTokenBalance] = useState(1); // Initial token balance is set to 1
+
+  console.log("Initial token balance:", tokenBalance);
 
   const candidates = [
     { id: 1, name: "Yudhishthra Sugumaran", party: "Warisan National", image: "https://media.licdn.com/dms/image/v2/D5603AQGcQqYV6XXsLg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1670626596172?e=1729123200&v=beta&t=GSyb5dzb6PkQLyGgj_QKjBptjODxWALoyth-JCT1HCs" },
@@ -18,48 +22,11 @@ export default function VotingSystem() {
     { id: 4, name: "Yusuf Dikeç", party: "Kuda", image: "https://vcdn1-english.vnecdn.net/2024/08/02/coolturk-jpeg-1722561518-6509-1722561550.jpg?w=680&h=0&q=100&dpr=1&fit=crop&s=Xpzdy7KYiY2ji1JHSpD3Xg" },
   ];
 
-  // Fetch token balance
-  const fetchTokenBalance = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/token/balance`,
-        {
-          method: "POST",
-          headers: {
-            client_id: process.env.NEXT_PUBLIC_CLIENT_ID,
-            client_secret: process.env.NEXT_PUBLIC_CLIENT_SECRET,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            wallet_address: sessionStorage.getItem("walletAddress"),
-          }),
-        }
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch balance");
-      }
-
-      const result = await response.json();
-      setBalance(result.balance); // Assuming the response has a `balance` field
-    } catch (error) {
-      console.error("Error fetching token balance:", error);
-      setBalance(null);
-    }
-  };
-
-  // Fetch balance on component mount
-  useEffect(() => {
-    if (sessionStorage.getItem("walletAddress")) {
-      fetchTokenBalance();
-    }
-  }, []);
-
   const handleRadioChange = (candidateId) => {
     setSelectedCandidate(candidateId);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
     if (!selectedCandidate) {
       toast.error("Please select a candidate to vote", {
         position: "bottom-center",
@@ -73,38 +40,8 @@ export default function VotingSystem() {
       return;
     }
 
-    setIsSubmitting(true);
-
-    try {
-      // Simulate API call to submit vote
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      // Deduct 1 from balance
-      if (balance > 0) {
-        setBalance(balance - 1);
-        toast.success("Vote submitted successfully!", {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "light",
-        });
-      } else {
-        toast.error("Insufficient balance to vote", {
-          position: "bottom-center",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          theme: "light",
-        });
-      }
-    } catch (error) {
-      console.error("Error submitting vote:", error);
-      toast.error("Error submitting vote", {
+    if (tokenBalance <= 0) {
+      toast.error("Insufficient balance to vote", {
         position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
@@ -113,17 +50,40 @@ export default function VotingSystem() {
         draggable: true,
         theme: "light",
       });
-    } finally {
-      setIsSubmitting(false);
-      setSelectedCandidate(null);
+      return;
     }
+
+    setIsSubmitting(true);
+
+    setTimeout(() => {
+      // Decrease token balance by 1 upon submitting the vote
+      setTokenBalance((prevBalance) => {
+        const newBalance = prevBalance - 1;
+        console.log("Token balance after voting:", newBalance);
+        return newBalance;
+      });
+
+      toast.success("Vote submitted successfully!", {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        theme: "light",
+      });
+      setSelectedCandidate(null);
+      setIsSubmitting(false);
+    }, 2000); // Simulating an API call delay
   };
 
   return (
     <div className="flex flex-col min-h-screen bg-cover bg-center" style={{ backgroundImage: `url('https://s.yimg.com/ny/api/res/1.2/oOiQyaE8aHuOu3LssdxqXQ--/YXBwaWQ9aGlnaGxhbmRlcjt3PTE2ODA7aD0xMDA2O2NmPXdlYnA-/https://media.zenfs.com/en/mmail.com.my/d2f68d526cb48b8913f81dc197812701')` }}>
-      <header className="absolute top-4 right-4 bg-black bg-opacity-70 text-white p-2 rounded">
-        <span className="text-lg font-bold">Balance: {balance !== null ? balance : 'Loading...'}</span>
-      </header>
+      {/* Token Balance Display */}
+      <div className="absolute top-4 right-4 bg-white border border-gray-300 rounded-lg shadow-md px-4 py-2">
+        <p className="text-gray-800 font-semibold">Token Balance: {tokenBalance}</p>
+      </div>
+
       <main className="flex-grow flex flex-col items-center justify-center p-4 bg-black bg-opacity-60">
         {/* Logo */}
         <a
