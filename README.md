@@ -1,41 +1,104 @@
-# This is a project template for APUBCC Devmatch 2024 Hackathon
+# E-Voting System
 
-The purpose of this template is to facilitate new developers to quickly get a hands-on approach and start developing using Maschain's API.  
-Test it out [HERE](https://maschainworkshop.vercel.app/)
+Welcome to the E-Voting System project developed by **Team_X**. This project provides an online voting platform where users can vote for candidates in an election. The system also supports wallet creation and token balance management.
 
-This project sets up the basic functions such as:
+## Features
 
-1. Creating User Wallet
-2. Minting Token
-3. Transferring Token
+- **Vote for Candidates:** Users can select and vote for their preferred candidates.
+- **Wallet Management:** Create a wallet to participate in voting.
+- **Token Balance:** Display and manage token balance. Voting deducts 1 token from the balance.
+- **Responsive Design:** Optimized for both desktop and mobile devices.
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Tech Stack
 
-## Getting Started
+- **Frontend:** React, Framer Motion, React Toastify, Font Awesome
+- **Backend:** [API details here]
+- **Styling:** Tailwind CSS
 
-First, run the development server:
+## Installation
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. **Clone the repository:**
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+    ```bash
+    git clone https://github.com/yourusername/e-voting-system.git
+    ```
 
-## Obtain Necessary Keys from Maschain
+2. **Navigate to the project directory:**
 
-Navigate to https://portal-testnet.maschain.com/ to get the necessary keys.
+    ```bash
+    cd e-voting-system
+    ```
 
-In the .env.example file, replace the values with your own key, and rename the file to just ".env" or ".env.local"
+3. **Install dependencies:**
 
-# Have fun building
+    ```bash
+    npm install
+    ```
 
-```bash
-Contact me or the team if you have any questions
-@OxBenjamintan - AKA LengzaiBen
-```
+4. **Start the development server:**
+
+    ```bash
+    npm run dev
+    ```
+
+    Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+## Usage
+
+1. **Creating a Wallet:**
+   - Click on the "Create Wallet" button.
+   - Follow the prompts to create a wallet.
+
+2. **Voting:**
+   - Select a candidate by clicking the radio button.
+   - Click "Submit Vote" to cast your vote.
+
+3. **Token Balance:**
+   - The token balance is displayed at the top corner of the interface.
+   - 1 token will be deducted from your balance after each vote.
+
+## Project Structure
+
+- `components/`
+  - `CreateWalletModal.js`: Modal for wallet creation.
+  - `VotingSystem.js`: Main voting interface.
+- `pages/`
+  - `index.js`: Home page.
+- `public/`
+  - `favicon.ico`: Favicon for the application.
+- `styles/`
+  - `globals.css`: Global styles.
+
+## Contributing
+
+We welcome contributions from the community. Please follow these steps to contribute:
+
+1. **Fork the repository.**
+2. **Create a new branch:**
+
+    ```bash
+    git checkout -b feature/your-feature
+    ```
+
+3. **Make your changes and commit them:**
+
+    ```bash
+    git add .
+    git commit -m "Add your commit message here"
+    ```
+
+4. **Push to your branch:**
+
+    ```bash
+    git push origin feature/your-feature
+    ```
+
+5. **Open a Pull Request.**
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+**Team_X** - Building a better voting experience!
